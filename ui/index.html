@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice Generator v3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <h2>📄 Invoice Generator</h2>
+            <ul>
+                <li class="active" data-tab="create">Create Invoice</li>
+                <li data-tab="payment">Payment Settings</li>
+                <li data-tab="business">Business & SMTP</li>
+                <li data-tab="history">Invoice History</li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <!-- Create Invoice Tab -->
+            <section id="create" class="tab-content active">
+                <h1>Create New Invoice</h1>
+                <form id="invoiceForm">
+                    <div class="form-section">
+                        <h3>Customer Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="name">Full Name *</label>
+                                <input type="text" id="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="text" id="phone">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="address">Street Address</label>
+                                <input type="text" id="address">
+                            </div>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city">
+                            </div>
+                            <div class="form-group">
+                                <label for="state">State/Province</label>
+                                <input type="text" id="state">
+                            </div>
+                            <div class="form-group">
+                                <label for="postcode">Postal/Zip Code</label>
+                                <input type="text" id="postcode">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Items</h3>
+                        <div id="itemsContainer">
+                            <div class="item-row">
+                                <div class="form-group" style="flex: 3;">
+                                    <label>Product/Service Name</label>
+                                    <input type="text" class="item-name" placeholder="Item description">
+                                </div>
+                                <div class="form-group" style="flex: 1;">
+                                    <label>Amount ($)</label>
+                                    <input type="number" class="item-price" placeholder="0.00" step="0.01">
+                                </div>
+                                <button type="button" class="remove-item" style="display: none;">✕</button>
+                            </div>
+                        </div>
+                        <button type="button" id="addItem" class="btn-secondary">+ Add Item</button>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Due Date</h3>
+                        <div class="due-date-options">
+                            <button type="button" class="due-preset" data-days="7">7 Days</button>
+                            <button type="button" class="due-preset" data-days="14">14 Days</button>
+                            <button type="button" class="due-preset" data-days="30">30 Days</button>
+                            <div class="custom-date">
+                                <label for="dueDate">Custom Date:</label>
+                                <input type="date" id="dueDate">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" id="previewInvoice" class="btn-primary">Generate Preview</button>
+                        <button type="submit" class="btn-success">Generate & Send</button>
+                    </div>
+                </form>
+                <div id="invoicePreview" style="display: none;">
+                    <h3>Invoice Generated!</h3>
+                    <p id="previewMessage"></p>
+                    <div class="preview-actions">
+                        <button type="button" id="sendEmailBtn" class="btn-primary">Send Email</button>
+                        <button type="button" id="openInvoiceBtn" class="btn-secondary">Open Invoice</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Payment Settings Tab -->
+            <section id="payment" class="tab-content">
+                <h1>Payment Settings</h1>
+                <form id="paymentForm">
+                    <div class="form-section">
+                        <h3>Bank Transfer Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="bankName">Bank Name</label>
+                                <input type="text" id="bankName">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="accountName">Account Name</label>
+                                <input type="text" id="accountName">
+                            </div>
+                            <div class="form-group">
+                                <label for="bsb">BSB</label>
+                                <input type="text" id="bsb">
+                            </div>
+                            <div class="form-group">
+                                <label for="accountNumber">Account Number</label>
+                                <input type="text" id="accountNumber">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>BPay Details (Optional)</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="bpayCode">Biller Code</label>
+                                <input type="text" id="bpayCode">
+                            </div>
+                            <div class="form-group">
+                                <label for="bpayRef">Reference</label>
+                                <input type="text" id="bpayRef">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-success">Save Payment Settings</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Business & SMTP Tab -->
+            <section id="business" class="tab-content">
+                <h1>Business & SMTP Settings</h1>
+                <form id="businessForm">
+                    <div class="form-section">
+                        <h3>Business Details</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" id="companyName">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="companyEmail">Company Email</label>
+                                <input type="email" id="companyEmail">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="companyPhone">Company Phone</label>
+                                <input type="text" id="companyPhone">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>SMTP Configuration</h3>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="smtpServer">SMTP Server</label>
+                                <input type="text" id="smtpServer" value="smtp.gmail.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="smtpPort">SMTP Port</label>
+                                <input type="number" id="smtpPort" value="587">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="smtpUsername">SMTP Username</label>
+                                <input type="email" id="smtpUsername">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="smtpPassword">SMTP App Password</label>
+                                <input type="password" id="smtpPassword">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3>Email Templates</h3>
+                        <div class="form-grid">
+                            <div class="form-group full-width">
+                                <label for="emailSubject">Email Subject</label>
+                                <input type="text" id="emailSubject" value="Invoice from {company}">
+                            </div>
+                            <div class="form-group full-width">
+                                <label for="emailBody">Email Body</label>
+                                <textarea id="emailBody" rows="6">Dear {name},
+
+Please find your invoice attached.
+
+Due: {due_date}
+Total: ${total}
+
+Thank you for your business!</textarea>
+                                <small>Available placeholders: {name}, {due_date}, {total}, {company}</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-success">Save Settings</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Invoice History Tab -->
+            <section id="history" class="tab-content">
+                <h1>Invoice History</h1>
+                <div class="history-actions">
+                    <button type="button" id="openFolderBtn" class="btn-secondary">📂 Open Invoices Folder</button>
+                    <button type="button" id="refreshHistory" class="btn-secondary">🔄 Refresh</button>
+                </div>
+                <div id="invoiceList">
+                    <p>No invoices found.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>

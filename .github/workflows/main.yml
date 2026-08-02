@@ -1,0 +1,79 @@
+name: Build macOS App
+
+on: 
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # So you can manually trigger it too
+
+jobs:
+  build:
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyinstaller pywebview reportlab
+      
+      - name: Create config.json
+        run: |
+          echo '{"company":{"name":"Your Business Name","email":"yourbusiness@gmail.com","phone":"(123) 456-7890"},"smtp":{"server":"smtp.gmail.com","port":587,"username":"","password":"","email_subject":"Invoice from {company}","email_body":"Dear {name},\n\nPlease find your invoice attached.\n\nDue: {due_date}\nTotal: ${total}\n\nThank you for your business!"},"payment":{"bank_name":"","account_name":"","bsb":"","account_number":"","bpay_biller_code":"","bpay_ref":""}}' > config.json
+      
+      - name: Create directories
+        run: |
+          mkdir -p assets
+          mkdir -p invoices
+      
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile \
+            --windowed \
+            --name "InvoiceGenerator" \
+            --add-data "ui:ui" \
+            --add-data "core:core" \
+            --add-data "api.py:." \
+            --add-data "config.json:." \
+            --hidden-import=reportlab \
+            --hidden-import=pywebview \
+            main.py
+      
+      - name: Create .app bundle
+        run: |
+          mkdir -p dist/InvoiceGenerator.app/Contents/MacOS
+          mkdir -p dist/InvoiceGenerator.app/Contents/Resources
+          cp dist/InvoiceGenerator dist/InvoiceGenerator.app/Contents/MacOS/
+          
+          cat > dist/InvoiceGenerator.app/Contents/Info.plist << EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>InvoiceGenerator</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.yourcompany.invoicegenerator</string>
+              <key>CFBundleName</key>
+              <string>InvoiceGenerator</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleShortVersionString</key>
+              <string>3.0</string>
+              <key>CFBundleVersion</key>
+              <string>3.0</string>
+              <key>NSHighResolutionCapable</key>
+              <true/>
+          </dict>
+          </plist>
+          EOF
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: InvoiceGenerator-Mac
+          path: dist/InvoiceGenerator.app

@@ -4,7 +4,7 @@ from datetime import datetime
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib import colors
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph, Table, TableStyle
 from reportlab.lib.units import inch
 from reportlab.lib.utils import ImageReader
@@ -17,13 +17,20 @@ class PDFGenerator:
         self.company_email = config['company']['email']
         self.company_phone = config['company']['phone']
 
-    def create_invoice(self, customer_details, payment_details, due_date, items):
+    # ✅ ADDED invoice_name parameter
+    def create_invoice(self, customer_details, payment_details, due_date, items, invoice_name=''):
         """Generate professional invoice with payment options"""
-        # Ensure invoices directory exists
         if not os.path.exists('invoices'):
             os.makedirs('invoices')
 
         timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+
+        # ✅ USE CUSTOM INVOICE NAME OR FALLBACK
+        if invoice_name.strip():
+            invoice_number = invoice_name
+        else:
+            invoice_number = f"INV-{timestamp}"
+
         filename = f"invoices/Invoice_{timestamp}_{customer_details['name'].replace(' ', '_')}.pdf"
 
         c = canvas.Canvas(filename, pagesize=letter)
@@ -43,7 +50,7 @@ class PDFGenerator:
 
         # ===== CUSTOMER INFO =====
         c.setFont("Helvetica-Bold", 12)
-        c.drawString(100, height - 170, "BILL TO:")
+        c.drawString(100, height - 160, "BILL TO:")
         c.setFont("Helvetica", 10)
 
         customer_info = [
@@ -67,7 +74,8 @@ class PDFGenerator:
         c.setFont("Helvetica-Bold", 12)
         c.drawString(350, height - 170, "INVOICE DETAILS")
         c.setFont("Helvetica", 10)
-        c.drawString(350, height - 190, f"Invoice #: INV-{timestamp}")
+        # ✅ USE CUSTOM INVOICE NUMBER
+        c.drawString(350, height - 190, f"Invoice #: {invoice_number}")
         c.drawString(350, height - 205, f"Date: {datetime.now().strftime('%Y-%m-%d')}")
         c.drawString(350, height - 220, f"Due: {due_date.strftime('%Y-%m-%d')}")
 
@@ -119,7 +127,7 @@ class PDFGenerator:
             if os.path.exists(logo_path):
                 try:
                     logo = ImageReader(logo_path)
-                    c.drawImage(logo, 350, payment_y - 160, width=100, height=50, preserveAspectRatio=True)
+                    c.drawImage(logo, 65, payment_y - 143, width=75, height=25, preserveAspectRatio=True)
                 except Exception as e:
                     self._draw_vector_bpay_logo(c, 350, payment_y - 140)
             else:

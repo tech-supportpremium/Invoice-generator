@@ -1,70 +1,27 @@
-# main.py
-import sys
-import os
-import json
 import webview
+import os
 from api import InvoiceAPI
 
 
-def resource_path(relative_path):
-    """Get absolute path to resource, works for dev and PyInstaller"""
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
-
-
-def ensure_config():
-    """Ensure config.json exists with defaults"""
-    config_path = 'config.json'
-    if not os.path.exists(config_path):
-        default_config = {
-            "company": {
-                "name": "Your Business Name",
-                "email": "yourbusiness@gmail.com",
-                "phone": "(123) 456-7890"
-            },
-            "smtp": {
-                "server": "smtp.gmail.com",
-                "port": 587,
-                "username": "",
-                "password": "",
-                "email_subject": "Invoice from {company}",
-                "email_body": "Dear {name},\n\nPlease find your invoice attached.\n\nDue: {due_date}\nTotal: ${total}\n\nThank you for your business!"
-            },
-            "payment": {
-                "bank_name": "",
-                "account_name": "",
-                "bsb": "",
-                "account_number": "",
-                "bpay_biller_code": "",
-                "bpay_ref": ""
-            }
-        }
-        with open(config_path, 'w') as f:
-            json.dump(default_config, f, indent=2)
-    return config_path
-
-
 def main():
-    # Ensure config exists
-    ensure_config()
+    # Build the full path to index.html
+    ui_path = os.path.join(os.path.dirname(__file__), 'ui', 'index.html')
 
-    # Ensure invoices directory exists
-    if not os.path.exists('invoices'):
-        os.makedirs('invoices')
+    print(f"Loading HTML from: {ui_path}")  # Debug line
+
+    # Read the HTML into a string
+    with open(ui_path, 'r', encoding='utf-8') as f:
+        html_content = f.read()
+
+    print(f"HTML loaded: {len(html_content)} characters")  # Debug line
 
     # Create API instance
     api = InvoiceAPI()
 
-    # Get UI path
-    ui_path = resource_path('ui/index.html')
-
-    # Create window
-    window = webview.create_window(
+    # Create window with html= NOT url=
+    webview.create_window(
         'Invoice Generator v3',
-        ui_path,
+        html=html_content,  # 👈 THIS IS THE KEY FIX
         js_api=api,
         width=1200,
         height=800,
@@ -72,8 +29,7 @@ def main():
         resizable=True
     )
 
-    # Start the application
-    webview.start(debug=False, private_mode=False)
+    webview.start(debug=True)
 
 
 if __name__ == '__main__':

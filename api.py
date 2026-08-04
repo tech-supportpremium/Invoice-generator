@@ -14,7 +14,6 @@ class InvoiceAPI:
         self.config = self._load_config()
 
     def _load_config(self):
-        """Load config from config.json"""
         try:
             with open('config.json', 'r') as f:
                 return json.load(f)
@@ -22,7 +21,6 @@ class InvoiceAPI:
             return self._create_default_config()
 
     def _create_default_config(self):
-        """Create default config if not found"""
         default_config = {
             "company": {
                 "name": "Your Business Name",
@@ -51,13 +49,10 @@ class InvoiceAPI:
         return default_config
 
     def get_config(self):
-        """Return full config.json contents"""
         return self.config
 
     def save_config(self, config_data):
-        """Save config to config.json"""
         try:
-            # Merge with existing to preserve any missing fields
             if 'company' not in config_data:
                 config_data['company'] = {}
             if 'smtp' not in config_data:
@@ -65,7 +60,6 @@ class InvoiceAPI:
             if 'payment' not in config_data:
                 config_data['payment'] = {}
 
-            # Ensure all fields exist
             default_config = self._create_default_config()
             for section in ['company', 'smtp', 'payment']:
                 for key in default_config[section]:
@@ -81,40 +75,37 @@ class InvoiceAPI:
             return {'success': False, 'error': str(e)}
 
     def generate_invoice(self, data):
-        """Generate PDF invoice"""
         try:
-            # Get config for company and payment details
             config = self.get_config()
-
-            # Create PDF generator
             pdf_gen = PDFGenerator(config)
 
-            # Parse due date
             due_date = datetime.strptime(data['due_date'], '%Y-%m-%d')
 
-            # Generate invoice
+            # ✅ UPDATED: Pass invoice_name to pdf_gen
             pdf_path = pdf_gen.create_invoice(
                 customer_details=data['customer'],
                 payment_details=config['payment'],
                 due_date=due_date,
-                items=data['items']
+                items=data['items'],
+                invoice_name=data.get('invoice_name', '')  # ✅ NEW
             )
+
+            # ✅ UPDATED: Use custom name in response too
+            invoice_number = data.get('invoice_name', f"INV-{datetime.now().strftime('%Y%m%d_%H%M%S')}")
 
             return {
                 'success': True,
                 'path': pdf_path,
-                'invoice_number': f"INV-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+                'invoice_number': invoice_number
             }
         except Exception as e:
             return {'success': False, 'error': str(e)}
 
     def send_email(self, pdf_path, data):
-        """Send invoice via email"""
         try:
             config = self.get_config()
             email_sender = EmailSender(config['smtp'])
 
-            # Prepare email data
             total = sum(item['price'] for item in data['items'])
             email_data = {
                 'name': data['customer']['name'],
@@ -137,7 +128,6 @@ class InvoiceAPI:
             return {'success': False, 'error': str(e)}
 
     def open_invoice_folder(self):
-        """Open invoices folder in file explorer"""
         try:
             invoice_path = os.path.abspath('invoices')
             if not os.path.exists(invoice_path):
@@ -154,7 +144,6 @@ class InvoiceAPI:
             return {'success': False, 'error': str(e)}
 
     def open_file(self, file_path):
-        """Open a specific file"""
         try:
             full_path = os.path.join('invoices', file_path)
             if not os.path.exists(full_path):

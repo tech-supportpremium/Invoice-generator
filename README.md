@@ -16,6 +16,6 @@ CURRENTLY UNDER HEAVY MAKEOVER-DO NOT USE OR DOWNLOAD
 ### From Source
 ```bash
 git clone https://github.com/tech-supportpremium/invoice-generator.git
-cd invoicer-v3
+cd invoice-generator
 pip install -r requirements.txt
 python main.py

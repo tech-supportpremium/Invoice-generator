@@ -2,6 +2,9 @@
 
 A desktop application for generating and sending invoices.
 
+CURRENTLY UNDER HEAVY MAKEOVER-DO NOT USE OR DOWNLOAD
+
+
 ## Features
 - Create professional PDF invoices
 - Send invoices via email
@@ -12,7 +15,7 @@ A desktop application for generating and sending invoices.
 
 ### From Source
 ```bash
-git clone https://github.com/yourusername/invoicer-v3.git
-cd invoicer-v3
+git clone https://github.com/tech-supportpremium/invoice-generator.git
+cd invoice-generator
 pip install -r requirements.txt
 python main.py

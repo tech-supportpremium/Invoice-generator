@@ -1,36 +1,32 @@
+# main.py - PyWebView wrapper (like Jugaad Search)
 import webview
-import os
-from api import InvoiceAPI
+import threading
+from app import app
 
 
-def main():
-    # Build the full path to index.html
-    ui_path = os.path.join(os.path.dirname(__file__), 'ui', 'index.html')
+def start_flask():
+    app.run(host='localhost', port=8090, debug=False)
 
-    print(f"Loading HTML from: {ui_path}")  # Debug line
 
-    # Read the HTML into a string
-    with open(ui_path, 'r', encoding='utf-8') as f:
-        html_content = f.read()
+if __name__ == '__main__':
+    print("""
+    ╔═══════════════════════════════════════════════════╗
+    ║   Invoice Generator v3 - Desktop App              ║
+    ║                                                   ║
+    ║   Starting Flask server...                        ║
+    ║   Opening app window...                           ║
+    ║                                                   ║
+    ║   Press CTRL+C to close                           ║
+    ╚═══════════════════════════════════════════════════╝
+    """)
 
-    print(f"HTML loaded: {len(html_content)} characters")  # Debug line
-
-    # Create API instance
-    api = InvoiceAPI()
-
-    # Create window with html= NOT url=
+    threading.Thread(target=start_flask, daemon=True).start()
     webview.create_window(
         'Invoice Generator v3',
-        html=html_content,  # 👈 THIS IS THE KEY FIX
-        js_api=api,
-        width=1200,
+        'http://localhost:8090',
+        width=1280,
         height=800,
         min_size=(800, 600),
         resizable=True
     )
-
-    webview.start(debug=True)
-
-
-if __name__ == '__main__':
-    main()
+    webview.start()

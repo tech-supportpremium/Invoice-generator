@@ -1,5 +1,4 @@
 # Invoice Generator v3
-#invoice-generator
 
 A desktop application for generating and sending invoices.
 

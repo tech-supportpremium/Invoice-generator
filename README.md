@@ -93,7 +93,7 @@ The app is safe — you can verify the code right here!
 
 ## 📄 License
 
-MIT
+Do what you want with it, I dont really care
 
 ---
 

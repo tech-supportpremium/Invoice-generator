@@ -2,8 +2,8 @@
 
 A desktop application for generating and sending invoices.
 
-CURRENTLY UNDER HEAVY MAKEOVER-DO NOT USE OR DOWNLOAD
-
+THIS REPO IS IN ITS FINAL STAGES OF ITS MAKEOVER🎉
+THE MESSAGE STILL APPLIES-NOT READY FOR DOWNLOAD YET
 
 ## Features
 - Create professional PDF invoices

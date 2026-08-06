@@ -9,6 +9,22 @@ A clean, cross-platform desktop app for generating professional PDF invoices wit
 
 ---
 
+## ⚠️ Windows SmartScreen Warning
+
+Windows may show a "Windows protected your PC" warning when you run the app.
+This is because the app is not signed with a paid certificate.
+
+**How to run it:**
+1. Click "More info"
+2. Click "Run anyway"
+3. The app will open normally
+
+The app is safe — you can verify the code right here!
+
+
+---
+
+
 ## 🚀 Features
 
 - **📄 Professional PDF Invoices** — Generate clean, branded invoices instantly
@@ -63,17 +79,6 @@ A clean, cross-platform desktop app for generating professional PDF invoices wit
 
 ---
 
-## 🐛 Known Issues
-
-- *[List any known issues here]*
-
----
-
-## 📸 Screenshots
-
-*[Paste screenshots of your app here]*
-
----
 
 ## 🙏 Credits
 
@@ -99,17 +104,6 @@ If you find this useful, consider giving it a ⭐ on GitHub!
 
 
 
-## ⚠️ Windows SmartScreen Warning
-
-Windows may show a "Windows protected your PC" warning when you run the app.
-This is because the app is not signed with a paid certificate.
-
-**How to run it:**
-1. Click "More info"
-2. Click "Run anyway"
-3. The app will open normally
-
-The app is safe — you can verify the code right here!
 
 
 

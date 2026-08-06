@@ -1,4 +1,11 @@
-# main.py - PyWebView wrapper (like Jugaad Search)
+import sys
+import io
+
+# ===== WINDOWS ENCODING FIX =====
+if sys.platform == 'win32':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
 import webview
 import threading
 from app import app
@@ -16,7 +23,7 @@ if __name__ == '__main__':
     ║   Starting Flask server...                        ║
     ║   Opening app window...                           ║
     ║                                                   ║
-    ║   Press CTRL+C to close                           ║
+    ║   Press CTRL+C to close                          ║
     ╚═══════════════════════════════════════════════════╝
     """)
 
@@ -30,6 +37,3 @@ if __name__ == '__main__':
         resizable=True
     )
     webview.start()
-
-
-

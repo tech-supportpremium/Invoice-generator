@@ -22,16 +22,16 @@ jobs:
       
       - name: Create config.json
         run: |
-          echo '{"company":{"name":"Your Business Name","email":"yourbusiness@gmail.com","phone":"(123) 456-7890"},"smtp":{"server":"smtp.gmail.com","port":587,"username":"","password":"","email_subject":"Invoice from {company}","email_body":"Dear {name},\n\nPlease find your invoice attached.\n\nDue: {due_date}\nTotal: ${total}\n\nThank you for your business!"},"payment":{"bank_name":"","account_name":"","bsb":"","account_number":"","bpay_biller_code":"","bpay_ref":""}}' > config.json
+          echo '{"company":{"name":"Your Business","email":"test@test.com","phone":"123"},"smtp":{"server":"smtp.gmail.com","port":587,"username":"","password":"","email_subject":"Invoice","email_body":"Hello"},"payment":{"bank_name":"","account_name":"","bsb":"","account_number":"","bpay_biller_code":"","bpay_ref":""}}' > config.json
       
       - name: Create directories
         run: |
           mkdir assets
           mkdir invoices
       
-      - name: Build with PyInstaller (Windows)
+      - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --name InvoiceGenerator --icon=logo.ico --add-data "ui;ui" --add-data "core;core" --add-data "api.py;." --add-data "config.json;." --hidden-import=reportlab --hidden-import=pywebview --hidden-import=flask --hidden-import=flask_cors main.py
+          pyinstaller --onefile --noconsole --name InvoiceGenerator --icon=icon.ico --add-data "ui;ui" --add-data "core;core" --add-data "api.py;." --add-data "config.json;." --hidden-import=reportlab --hidden-import=pywebview --hidden-import=flask --hidden-import=flask_cors main.py
       
       - name: Upload Windows artifact
         uses: actions/upload-artifact@v4
@@ -55,24 +55,23 @@ jobs:
       
       - name: Create config.json
         run: |
-          echo '{"company":{"name":"Your Business Name","email":"yourbusiness@gmail.com","phone":"(123) 456-7890"},"smtp":{"server":"smtp.gmail.com","port":587,"username":"","password":"","email_subject":"Invoice from {company}","email_body":"Dear {name},\n\nPlease find your invoice attached.\n\nDue: {due_date}\nTotal: ${total}\n\nThank you for your business!"},"payment":{"bank_name":"","account_name":"","bsb":"","account_number":"","bpay_biller_code":"","bpay_ref":""}}' > config.json
+          echo '{"company":{"name":"Your Business","email":"test@test.com","phone":"123"},"smtp":{"server":"smtp.gmail.com","port":587,"username":"","password":"","email_subject":"Invoice","email_body":"Hello"},"payment":{"bank_name":"","account_name":"","bsb":"","account_number":"","bpay_biller_code":"","bpay_ref":""}}' > config.json
       
       - name: Create directories
         run: |
           mkdir -p assets
           mkdir -p invoices
       
-      - name: Build with PyInstaller (Mac)
+      - name: Build with PyInstaller
         run: |
-          pyinstaller --onefile --windowed --name InvoiceGenerator --icon=logo.ico --add-data "ui:ui" --add-data "core:core" --add-data "api.py:." --add-data "config.json:." --hidden-import=reportlab --hidden-import=pywebview --hidden-import=flask --hidden-import=flask_cors main.py
+          pyinstaller --onefile --windowed --name InvoiceGenerator --icon=icon.ico --add-data "ui:ui" --add-data "core:core" --add-data "api.py:." --add-data "config.json:." --hidden-import=reportlab --hidden-import=pywebview --hidden-import=flask --hidden-import=flask_cors main.py
       
       - name: Create .app bundle
         run: |
           mkdir -p dist/InvoiceGenerator.app/Contents/MacOS
           mkdir -p dist/InvoiceGenerator.app/Contents/Resources
           cp dist/InvoiceGenerator dist/InvoiceGenerator.app/Contents/MacOS/
-          cp logo.ico dist/InvoiceGenerator.app/Contents/Resources/  # Optional: include icon in resources
-          
+          cp icon.ico dist/InvoiceGenerator.app/Contents/Resources/  # Optional
           cat > dist/InvoiceGenerator.app/Contents/Info.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -101,3 +100,41 @@ jobs:
         with:
           name: InvoiceGenerator-Mac
           path: dist/InvoiceGenerator.app
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libgirepository1.0-dev gir1.2-webkit2-4.0
+      
+      - name: Install Python dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pyinstaller pywebview reportlab flask flask-cors
+      
+      - name: Create config.json
+        run: |
+          echo '{"company":{"name":"Your Business","email":"test@test.com","phone":"123"},"smtp":{"server":"smtp.gmail.com","port":587,"username":"","password":"","email_subject":"Invoice","email_body":"Hello"},"payment":{"bank_name":"","account_name":"","bsb":"","account_number":"","bpay_biller_code":"","bpay_ref":""}}' > config.json
+      
+      - name: Create directories
+        run: |
+          mkdir -p assets
+          mkdir -p invoices
+      
+      - name: Build with PyInstaller
+        run: |
+          pyinstaller --onefile --name InvoiceGenerator --add-data "ui:ui" --add-data "core:core" --add-data "api.py:." --add-data "config.json:." --hidden-import=reportlab --hidden-import=pywebview --hidden-import=flask --hidden-import=flask_cors main.py
+      
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: InvoiceGenerator-Linux
+          path: dist/InvoiceGenerator

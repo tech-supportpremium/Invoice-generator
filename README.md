@@ -1,8 +1,3 @@
-THIS REPO IS IN ITS FINAL STAGES OF ITS MAKEOVER🎉
-
-THE MESSAGE STILL APPLIES-NOT READY FOR DOWNLOAD YET
-
-
 # 🧾 Invoice Generator v3.0
 
 A clean, cross-platform desktop app for generating professional PDF invoices with custom branding, payment options, and email support.

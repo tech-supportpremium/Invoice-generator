@@ -7,6 +7,7 @@ THIS REPO IS IN ITS FINAL STAGES OF ITS MAKEOVER🎉
 THE MESSAGE STILL APPLIES-NOT READY FOR DOWNLOAD YET
 
 
+
 ## ⚠️ Windows SmartScreen Warning
 
 Windows may show a "Windows protected your PC" warning when you run the app.

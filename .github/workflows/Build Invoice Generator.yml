@@ -6,8 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  
-    build-windows:
+  build-windows:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -72,7 +71,7 @@ jobs:
           mkdir -p dist/InvoiceGenerator.app/Contents/MacOS
           mkdir -p dist/InvoiceGenerator.app/Contents/Resources
           cp dist/InvoiceGenerator dist/InvoiceGenerator.app/Contents/MacOS/
-          cp icon.ico dist/InvoiceGenerator.app/Contents/Resources/  # Optional
+          cp icon.ico dist/InvoiceGenerator.app/Contents/Resources/ 2>/dev/null || true
           cat > dist/InvoiceGenerator.app/Contents/Info.plist << EOF
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -106,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-    
+      
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'

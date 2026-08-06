@@ -11,11 +11,3 @@ CURRENTLY UNDER HEAVY MAKEOVER-DO NOT USE OR DOWNLOAD
 - Customizable business and payment settings
 - Invoice history tracking
 
-## Installation
-
-### From Source
-```bash
-git clone https://github.com/tech-supportpremium/invoice-generator.git
-cd invoice-generator
-pip install -r requirements.txt
-python main.py

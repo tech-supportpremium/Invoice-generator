@@ -3,6 +3,7 @@
 A desktop application for generating and sending invoices.
 
 THIS REPO IS IN ITS FINAL STAGES OF ITS MAKEOVER🎉
+
 THE MESSAGE STILL APPLIES-NOT READY FOR DOWNLOAD YET
 
 ## Features

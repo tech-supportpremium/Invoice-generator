@@ -1,6 +1,6 @@
 # 🧾 Invoice Generator v3.0
 
-V3.0 IS LIVE🎉
+# V3.0 IS LIVE🎉
 
 A clean, cross-platform desktop app for generating professional PDF invoices with custom branding, payment options, and email support.
 

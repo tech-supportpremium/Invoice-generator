@@ -54,7 +54,7 @@ The app is safe — you can verify the code right here!
  
  **Linux**  `InvoiceGenerator`  `chmod +x` and run 
 
- Homebrew is also available for macOS and Linux: 'brew install tech-supportpremium/tap/invoice-generator'
+ Homebrew is also available for macOS and Linux: `brew install tech-supportpremium/tap/invoice-generator`
 
 ---
 

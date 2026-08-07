@@ -14,6 +14,14 @@ This is because the app is not signed with a paid certificate.
 2. Click "Run anyway"
 3. The app will open normally
 
+If that method doesnt work:
+1. Right click the app
+2. Properties
+3. Check the box: "Unblock"
+4. Hit apply
+5. Press OK
+6. The app should open normally
+
 The app is safe — you can verify the code right here!
 
 

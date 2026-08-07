@@ -1,0 +1,16 @@
+name: Get Source Code SHA256
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get-sha:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download source code from release
+        run: |
+          curl -L -O https://github.com/tech-supportpremium/Invoice-generator/archive/refs/tags/releaase.tar.gz
+          sha256sum releaase.tar.gz
+      - name: Show SHA256
+        run: |
+          echo "SHA256: $(sha256sum releaase.tar.gz | cut -d ' ' -f 1)"

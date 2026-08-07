@@ -32,11 +32,6 @@ The app is safe — you can verify the code right here!
 
 ---
 
-## 🖼️ Screenshots
-
-
----
-
 ## 📥 Downloads
 
 
@@ -44,7 +39,7 @@ The app is safe — you can verify the code right here!
  **Windows**  `InvoiceGenerator.exe`  Single executable — just run it! 
  
 
- **macOS**  `InvoiceGenerator-Mac.zip`  Unzip, drag to Applications folder 
+ **macOS**  `InvoiceGenerator-Mac.zip`  Unzip, drag to Applications folder (.dmg is also available!)
  
  
  **Linux**  `InvoiceGenerator`  `chmod +x` and run 
